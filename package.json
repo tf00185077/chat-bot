@@ -1,0 +1,22 @@
+{
+  "name": "auto-chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "pnpm --filter puppeteer-bot build && pnpm --filter ai-server build",
+    "start:puppeteer": "pnpm --filter puppeteer-bot start",
+    "start:ai-server": "pnpm --filter ai-server start",
+    "start:all": "pnpm run start:ai-server & pnpm run start:puppeteer"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "nodemon": "^3.1.9",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}
