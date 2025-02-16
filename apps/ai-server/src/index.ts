@@ -1,29 +1,34 @@
 import express from 'express';
-// import axios from 'axios';
 import dotenv from 'dotenv';
-
+import Openai from 'openai';
 dotenv.config({ path: '../../.env' });
 
 const app = express();
 app.use(express.json());
-
-app.post('/api/chat', async (req, res) => {
-  const { message } = req.body;
-
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-    },
-    body: JSON.stringify({
-      model: 'gpt-4',
-      messages: [{ role: 'user', content: message }],
-    }),
-  });
-
-  const data = await response.json();
-  res.json({ reply: data.choices[0].message.content });
+const openai = new Openai({
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
-app.listen(5000, () => console.log('AI 伺服器運行於 http://localhost:5000'));
+app.post("/api/chat", async (req, res) => {
+  const { message } = req.body;
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: "You are a helpful assistant." },
+        { role: "system", content: "請你回覆的訊息要簡潔，不要超過10字，且你是超級幽默風趣的聊天高手，擅長用機智、幽默的方式回話。" },
+        { role: "user", content: message },
+      ],
+      store: true, // 啟用 OpenAI 記憶功能
+    });
+
+    res.json({ reply: completion.choices[0].message.content });
+  } catch (error) {
+    console.error("OpenAI API 發生錯誤:", error);
+    res.status(500).json({ reply: "抱歉，我無法回應。" });
+  }
+});
+
+// 啟動伺服器
+app.listen(5000, () => console.log("AI 伺服器運行於 http://localhost:5000"));

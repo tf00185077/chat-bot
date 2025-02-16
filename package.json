@@ -7,7 +7,7 @@
     "build": "pnpm --filter puppeteer-bot build && pnpm --filter ai-server build",
     "start:puppeteer": "pnpm --filter puppeteer-bot start",
     "start:ai-server": "pnpm --filter ai-server start",
-    "start:all": "pnpm run start:ai-server & pnpm run start:puppeteer"
+    "start:all": "pnpm run start:ai-server && start pnpm run start:puppeteer"
   },
   "keywords": [],
   "author": "",
